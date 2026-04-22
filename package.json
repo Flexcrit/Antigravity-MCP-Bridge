@@ -1,0 +1,24 @@
+{
+  "name": "antigravity-mcp-bridge",
+  "version": "1.0.0",
+  "description": "Agentic MCP Bridge template for the Antigravity environment",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "npx ts-node src/server.ts",
+    "test": "echo \"No tests configured yet\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  }
+}

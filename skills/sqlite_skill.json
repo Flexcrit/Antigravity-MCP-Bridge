@@ -1,0 +1,99 @@
+{
+  "$schema": "https://antigravity.ai/schemas/skill/v1",
+  "id": "sqlite-mcp-skill",
+  "name": "SQLite Database Connector",
+  "version": "1.0.0",
+  "description": "Allows an Antigravity agent to connect to a local SQLite database via the Model Context Protocol. Exposes query, insert, update, delete, and schema-inspection tools over an MCP stdio bridge.",
+  "author": "Antigravity",
+  "tags": ["database", "sqlite", "mcp", "local", "data"],
+  "type": "mcp_bridge",
+  "transport": "stdio",
+  "scope": "global",
+
+  "server": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "${env:SQLITE_DB_PATH}"],
+    "env": {
+      "SQLITE_DB_PATH": {
+        "description": "Absolute path to the SQLite database file the agent should connect to.",
+        "required": true,
+        "example": "/Users/sameer/data/myapp.db"
+      }
+    }
+  },
+
+  "tools": [
+    {
+      "name": "sqlite_query",
+      "description": "Execute a read-only SQL SELECT statement against the connected SQLite database and return the result rows as JSON.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string",
+            "description": "The SQL SELECT query to execute."
+          }
+        },
+        "required": ["sql"]
+      }
+    },
+    {
+      "name": "sqlite_execute",
+      "description": "Execute a write SQL statement (INSERT, UPDATE, DELETE, CREATE, DROP) against the connected SQLite database.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string",
+            "description": "The SQL statement to execute."
+          }
+        },
+        "required": ["sql"]
+      }
+    },
+    {
+      "name": "sqlite_list_tables",
+      "description": "Return the names of all tables in the connected SQLite database.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "sqlite_describe_table",
+      "description": "Return the column names and types for a given table in the SQLite database.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "The table name to inspect."
+          }
+        },
+        "required": ["table"]
+      }
+    }
+  ],
+
+  "antigravity": {
+    "managerView": {
+      "icon": "database",
+      "category": "Data Sources",
+      "quickConnect": true,
+      "configFields": [
+        {
+          "key": "SQLITE_DB_PATH",
+          "label": "SQLite Database Path",
+          "type": "file",
+          "placeholder": "/path/to/your/database.db",
+          "helpText": "Select or paste the absolute path to your .db or .sqlite file."
+        }
+      ]
+    },
+    "agentCapabilities": [
+      "read_data",
+      "write_data",
+      "schema_inspection"
+    ]
+  }
+}
